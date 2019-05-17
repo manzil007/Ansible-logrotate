@@ -1,0 +1,8 @@
+---
+- name: create logrotate per day
+  template:
+   src: logrotate.conf.j2
+   dest: /etc/logrotate.d/messages.conf
+   owner: root
+   group: root
+   mode: 0644

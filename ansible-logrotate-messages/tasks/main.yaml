@@ -1,0 +1,32 @@
+---
+- name: create compress file
+  template:
+   src: ansible-logrotate-messages/files/compress.sh
+   dest: /var/compress.sh
+   owner: root
+   group: root
+   mode: 0777
+
+- name: moving files to different location
+  shell: "mv /var/log/messages-2019* /var/lib/dcos"
+
+- name: Jump into /var/log
+  command: cd /var/lib/dcos/
+
+- name: Compress old Log Files
+  command: sh /var/compress.sh
+
+- name: moving xz files back to /var/log
+  shell: "mv /var/lib/dcos/messages-2019* /var/log"
+
+- name: Remove the script
+  file:
+    path: /var/compress.sh
+    state: absent
+
+- include: 1-logrotate.yaml
+
+- name: Restart rsyslog
+  service:
+   name: rsyslog
+   state: restarted

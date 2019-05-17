@@ -1,0 +1,9 @@
+/var/log/messages
+{
+  weekly
+  create 0640 root adm
+  rotate 4
+  compress
+  compresscmd /usr/bin/xz
+  compressext .xz
+}
